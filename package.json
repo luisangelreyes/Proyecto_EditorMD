@@ -1,5 +1,5 @@
 {
-  "name": "editor_md",
+  "name": "SuperEditor-MD",
   "version": "1.0.0",
   "description": "Proyecto hecho en Electron de un versátil y chiclebomba Editor Markdown ",
   "license": "ISC",
@@ -7,8 +7,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build:win":"npx electron-builder --win --dir"
   },
+  
   "devDependencies": {
     "electron": "^41.0.3",
     "electron-builder": "^26.8.1"

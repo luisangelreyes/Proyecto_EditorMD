@@ -1,4 +1,5 @@
-const { Menu, shell } = require('electron'); 
+const {app, Menu, shell } = require('electron'); 
+const { type } = require('node:os');
 
 const template = [
     {
@@ -19,10 +20,34 @@ const template = [
             {
                 label: 'Herramientas de Desarrollador',
                 role: 'toggleDevTools'
-            }
+            },
+            {
+                type: 'separator' 
+            },
+        {   
+            label: 'Recarga',
+            role: 'reload',
+            accelerator: 'Alt+R'
+        }
         ]
     }
 ];
+
+if (process.platform === 'win32') {
+    template.unshift({
+        label: app.getName(),
+        submenu:[
+            {
+                label:'Acerca de',
+                role: 'about'},
+            {type: 'separator'},
+            {
+                label: 'Salir',
+                role: 'quit',
+            }
+        ]
+    })
+}
 
 
  const menu = Menu.buildFromTemplate(template);
