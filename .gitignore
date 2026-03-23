@@ -1,0 +1,30 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de compilación y salida (Electron Builder / Forge)
+dist/
+out/
+release/
+*.exe
+*.dmg
+*.app
+*.deb
+*.rpm
+*.zip
+
+# Variables de entorno (Contraseñas, API Keys)
+.env
+.env.local
+
+# Archivos del sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
