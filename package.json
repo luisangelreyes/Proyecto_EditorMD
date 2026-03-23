@@ -7,9 +7,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "electron .",
-    "build:win":"npx electron-builder --win --dir"
-  },
+    "start": "set DEBUG=true & electron .",
+    "build:win":"npx electron-builder --win --di"
+    },
   
   "devDependencies": {
     "electron": "^41.0.3",

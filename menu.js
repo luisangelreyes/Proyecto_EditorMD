@@ -1,5 +1,6 @@
 const {app, Menu, shell } = require('electron'); 
 const { type } = require('node:os');
+const { BrowserWindow } = require('electron');
 
 const template = [
     {
@@ -15,22 +16,21 @@ const template = [
         ]
     },
     {
-        label: 'Depurador',
+        label: 'Formato',
         submenu: [
             {
-                label: 'Herramientas de Desarrollador',
-                role: 'toggleDevTools'
-            },
-            {
-                type: 'separator' 
-            },
-        {   
-            label: 'Recarga',
-            role: 'reload',
-            accelerator: 'Alt+R'
-        }
+                label: 'Toggle Bold',
+                click() {
+                    const window = BrowserWindow.getFocusedWindow();
+                    window.webContents.send(
+                        'editor-event',
+                        'toggle-bold'
+                    );
+                }
+            }
         ]
     }
+
 ];
 
 if (process.platform === 'win32') {
@@ -49,7 +49,27 @@ if (process.platform === 'win32') {
     })
 }
 
+if (process.env.DEBUG){
+    template.push({
 
+        label: 'Depurador',
+        submenu: [
+            {
+                label: 'Herramientas de Desarrollador',
+                role: 'toggleDevTools'
+            },
+            {
+                type: 'separator' 
+            },
+        {   
+            label: 'Recarga',
+            role: 'reload',
+            accelerator: 'Ctrl+R'
+        }
+        ]
+    
+    });
+}
  const menu = Menu.buildFromTemplate(template);
 
 module.exports = menu;
