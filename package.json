@@ -8,14 +8,23 @@
   "main": "index.js",
   "scripts": {
     "start": "set DEBUG=true & electron .",
-    "build:win":"npx electron-builder --win --dir"
-    },
-  
-  "devDependencies": {
-    "electron": "^41.0.3",
-    "electron-builder": "^26.8.1"
+    "build:win": "npx electron-builder --win --dir",
+    "publish:win": "npx electron-builder --win -p always"
   },
-  "dependencies": {
-    "simplemde": "^1.11.2"
+  "build": {
+    "appId": "com.luismendoza.supereditor",
+    "publish": {
+      "provider": "github",
+      "owner": "luisangelreyes",
+      "repo": "Proyecto_EditorMD"
+    }
+    },
+    "devDependencies": {
+      "electron": "^41.0.3",
+      "electron-builder": "^26.8.1"
+    },
+    "dependencies": {
+      "electron-updater": "^6.8.3",
+      "simplemde": "^1.11.2"
+    }
   }
-}

@@ -3,6 +3,8 @@ const { readSync } = require('fs');
 const menu = require('./menu');
 const fs = require ('fs');
 const { title } = require('process');
+const { autoUpdater } = require('electron-updater');
+
 
 let window;
 
@@ -14,10 +16,13 @@ app.on('ready', () => {
             nodeIntegration: true,
             contextIsolation: false
         }
+        
     });
 
     window.loadFile('index.html');
     require('electron').Menu.setApplicationMenu(menu);
+
+    autoUpdater.checkForUpdatesAndNotify();
 });
 
 
