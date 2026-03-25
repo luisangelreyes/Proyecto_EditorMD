@@ -1,10 +1,39 @@
-//const { app, Menu, shell } = require('electron');
-//const {BrowserWindow} = require('electron');
-//const {globalShortcut} = require('electron');
-// const { type } = require('node:os');
-// const { app, Menu, shell, ipcMain, BrowserWindow, globalShortcut, dialog } = require('electron');
+const { type } = require('node:os');
+const fs = require ('fs');
+const { app, Menu, shell, BrowserWindow, globalShortcut,dialog } = require('electron');
 
-const { app, Menu, shell, BrowserWindow, globalShortcut } = require('electron');
+
+function saveFile() {
+    console.log('Guardando Archivo');
+    const window = BrowserWindow.getFocusedWindow();
+    if (window) {
+        window.webContents.send('editor-event', 'save');
+    }
+}
+
+function loadFile() {
+    const window = BrowserWindow.getFocusedWindow();
+    const options = {
+        title: 'Elegir un archivo Markdown',
+        filters: [
+            { name: 'Archivos Markdown', extensions: ['md'] },
+            { name: 'Archivos de texto', extensions: ['txt'] }
+        ]
+    };
+
+    dialog.showOpenDialog(window, options).then(result => {
+        if (!result.canceled && result.filePaths.length > 0) {
+            try {
+                const content = fs.readFileSync(result.filePaths[0]).toString();
+                window.webContents.send('load', content);
+            } catch (error) {
+                console.error("Error al leer el archivo:", error);
+            }
+        }
+    }).catch(err => {
+        console.error("Error en el diálogo de apertura:", err);
+    });
+}
 
 const template = [
     {
@@ -42,17 +71,11 @@ if (process.platform === 'win32') {
     template.unshift({
         label: app.getName(),
         submenu: [
-            {
-                label: 'Acerca de',
-                role: 'about'
-            },
+            { label: 'Acerca de', role: 'about' },
             { type: 'separator' },
-            {
-                label: 'Salir',
-                role: 'quit',
-            }
+            { label: 'Salir', role: 'quit' }
         ]
-    })
+    });
 }
 
 if (process.env.DEBUG) {
@@ -80,10 +103,11 @@ if (process.env.DEBUG) {
 app.on('ready', () => {
     globalShortcut.register('Ctrl+S', () => {
         console.log('Guardando Archivo');
-        const window = BrowserWindow.getAllWindows()[0];
+        const window = BrowserWindow.getFocusedWindow();
         window.webContents.send('editor-event', 'save');
-
     });
+    globalShortcut.register('Ctrl+O', () => { loadFile(); });
+
 });
 
 const menu = Menu.buildFromTemplate(template);

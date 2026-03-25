@@ -47,6 +47,14 @@ ipcRenderer.send('editor-reply', `Received ${arg}`);
 ipcRenderer.send('save', editor.value());            }
         });
         ipcRenderer.send('editor-reply', 'Page Loaded');
+
+        ipcRenderer.on('load', (event, content) => {
+            if (content) {
+                editor.value(content);
+            }
+        });
+
+        ipcRenderer.send('editor-reply', 'Page Loaded');
     </script>
 </body>
 

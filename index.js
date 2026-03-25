@@ -28,7 +28,7 @@ ipcMain.on('editor-reply', (event, arg) => {
     console.log(`Received reply from web page: ${arg}`);
 });
 ipcMain.on('save', (event, arg) => {
-    const window = BrowserWindow.getAllWindows()[0];
+    const window = BrowserWindow.getFocusedWindow();
     const options = {
         title: 'Guardar Archivo MD',
         filters:[
