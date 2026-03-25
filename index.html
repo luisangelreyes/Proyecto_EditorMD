@@ -24,7 +24,7 @@
     }
 </style>
 
-<body>
+<body ondrop="dropHandler(event);" ondragover="event.preventDefault();">
     <h1 style="text-align: center; font-family: 'Trebuchet MS';">Editor Markdown</h1>
 
     <textarea id="editor"></textarea>
@@ -39,12 +39,13 @@
 
         ipcRenderer.on('editor-event', (event, arg) => {
             console.log(arg);
-ipcRenderer.send('editor-reply', `Received ${arg}`);
+            ipcRenderer.send('editor-reply', `Received ${arg}`);
             if (arg === 'toggle-bold') {
                 editor.toggleBold();
             }
             if (arg === 'save') {
-ipcRenderer.send('save', editor.value());            }
+                ipcRenderer.send('save', editor.value());
+            }
         });
         ipcRenderer.send('editor-reply', 'Page Loaded');
 
@@ -53,8 +54,26 @@ ipcRenderer.send('save', editor.value());            }
                 editor.value(content);
             }
         });
-
         ipcRenderer.send('editor-reply', 'Page Loaded');
+
+    function dropHandler(event){
+            console.log('Archivo(s) arrastrado');
+            event.preventDefault();
+            if (event.dataTransfer.items) {
+                if (event.dataTransfer.items[0].kind === 'file') {
+                    var file = event.dataTransfer.items[0].getAsFile();                    
+                    if (file.type === 'text/markdown' || file.name.endsWith('.md')) {
+                        var reader = new FileReader();                        
+                        reader.onload = e => {
+                            editor.codemirror.setValue(e.target.result); 
+                        };                        
+                        reader.readAsText(file);
+                    } else {
+                        console.log("Archivo no valido");
+                    }
+                }
+            }
+        }
     </script>
 </body>
 

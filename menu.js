@@ -37,6 +37,21 @@ function loadFile() {
 
 const template = [
     {
+        label: 'Archivo',
+        submenu: [
+            {
+                label: 'Abrir',
+                accelerator: 'Ctrl+O',
+                click() { loadFile(); }
+            },
+            {
+                label: 'Guardar',
+                accelerator: 'Ctrl+S',
+                click() { saveFile(); }
+            }
+        ]
+    },
+    {
         label: 'Ayuda',
         role: 'help',
         submenu: [
