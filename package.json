@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "set DEBUG=true & electron .",
-    "build:win":"npx electron-builder --win --di"
+    "build:win":"npx electron-builder --win --dir"
     },
   
   "devDependencies": {

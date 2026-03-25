@@ -1,6 +1,10 @@
-const {app, Menu, shell } = require('electron'); 
-const { type } = require('node:os');
-const { BrowserWindow } = require('electron');
+//const { app, Menu, shell } = require('electron');
+//const {BrowserWindow} = require('electron');
+//const {globalShortcut} = require('electron');
+// const { type } = require('node:os');
+// const { app, Menu, shell, ipcMain, BrowserWindow, globalShortcut, dialog } = require('electron');
+
+const { app, Menu, shell, BrowserWindow, globalShortcut } = require('electron');
 
 const template = [
     {
@@ -21,26 +25,28 @@ const template = [
             {
                 label: 'Toggle Bold',
                 click() {
-                    const window = BrowserWindow.getFocusedWindow();
-                    window.webContents.send(
-                        'editor-event',
-                        'toggle-bold'
-                    );
+                    const window = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0];
+                    if (window) {
+                        window.webContents.send(
+                            'editor-event',
+                            'toggle-bold'
+                        );
+                    }
                 }
             }
         ]
     }
-
 ];
 
 if (process.platform === 'win32') {
     template.unshift({
         label: app.getName(),
-        submenu:[
+        submenu: [
             {
-                label:'Acerca de',
-                role: 'about'},
-            {type: 'separator'},
+                label: 'Acerca de',
+                role: 'about'
+            },
+            { type: 'separator' },
             {
                 label: 'Salir',
                 role: 'quit',
@@ -49,7 +55,7 @@ if (process.platform === 'win32') {
     })
 }
 
-if (process.env.DEBUG){
+if (process.env.DEBUG) {
     template.push({
 
         label: 'Depurador',
@@ -59,18 +65,28 @@ if (process.env.DEBUG){
                 role: 'toggleDevTools'
             },
             {
-                type: 'separator' 
+                type: 'separator'
             },
-        {   
-            label: 'Recarga',
-            role: 'reload',
-            accelerator: 'Ctrl+R'
-        }
+            {
+                label: 'Recarga',
+                role: 'reload',
+                accelerator: 'Ctrl+R'
+            }
         ]
-    
+
     });
 }
- const menu = Menu.buildFromTemplate(template);
+
+app.on('ready', () => {
+    globalShortcut.register('Ctrl+S', () => {
+        console.log('Guardando Archivo');
+        const window = BrowserWindow.getFocusedWindow();
+        window.webContents.send('editor-event', 'save');
+
+    });
+});
+
+const menu = Menu.buildFromTemplate(template);
 
 module.exports = menu;
 

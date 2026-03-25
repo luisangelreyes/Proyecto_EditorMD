@@ -1,43 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,
         initial-scale=1.0">
-        <meta 
-            http-equiv="Content-Security-Policy"
-            content="script-src 'self' 'unsafe-inline';"
-            />
-            <title>Editor Markdown</title>
-        <link rel="stylesheet" href="./node_modules/simplemde/dist/simplemde.min.css">
-        <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
-    </head>
-    <style>
-        html,body {
-            height: 100%;
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-        }
-        .CodeMirror{
-            flex: 1;
-        }
-    </style>
-    <body>
-        <h1 style="text-align: center; font-family: 'Trebuchet MS';">Editor Markdown</h1>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <title>Editor Markdown</title>
+    <link rel="stylesheet" href="./node_modules/simplemde/dist/simplemde.min.css">
+    <script src="./node_modules/simplemde/dist/simplemde.min.js"></script>
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
 
-        <textarea id="editor"></textarea>
+    .CodeMirror {
+        flex: 1;
+    }
+</style>
 
-        <script>
-            var editor = new SimpleMDE ({
-                element: document.getElementById('editor')
-            });
-            const{ ipcRenderer } = require('electron');
-            ipcRenderer.on('editor-event', (event, arg) => {
-                console.log(arg);
-            event.sender.send('editor-reply',`Received ${arg}`);
-            });
-                ipcRenderer.send('editor-reply', 'Page Loaded');
-        </script>
-    </body>
+<body>
+    <h1 style="text-align: center; font-family: 'Trebuchet MS';">Editor Markdown</h1>
+
+    <textarea id="editor"></textarea>
+
+    <script>
+
+        var editor = new SimpleMDE({
+            element: document.getElementById('editor')
+        });
+
+        const { ipcRenderer } = require('electron');
+
+        ipcRenderer.on('editor-event', (event, arg) => {
+            console.log(arg);
+ipcRenderer.send('editor-reply', `Received ${arg}`);
+            if (arg === 'toggle-bold') {
+                editor.toggleBold();
+            }
+            if (arg === 'save') {
+ipcRenderer.send('save', editor.value());            }
+        });
+        ipcRenderer.send('editor-reply', 'Page Loaded');
+    </script>
+</body>
+
 </html>
