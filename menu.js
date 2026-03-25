@@ -80,7 +80,7 @@ if (process.env.DEBUG) {
 app.on('ready', () => {
     globalShortcut.register('Ctrl+S', () => {
         console.log('Guardando Archivo');
-        const window = BrowserWindow.getFocusedWindow();
+        const window = BrowserWindow.getAllWindows()[0];
         window.webContents.send('editor-event', 'save');
 
     });

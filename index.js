@@ -11,7 +11,8 @@ app.on('ready', () => {
         width: 1280,
         height: 720,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: false
         }
     });
 
@@ -27,7 +28,7 @@ ipcMain.on('editor-reply', (event, arg) => {
     console.log(`Received reply from web page: ${arg}`);
 });
 ipcMain.on('save', (event, arg) => {
-    const window = BrowserWindow.getFocusedWindow();
+    const window = BrowserWindow.getAllWindows()[0];
     const options = {
         title: 'Guardar Archivo MD',
         filters:[
@@ -44,14 +45,10 @@ ipcMain.on('save', (event, arg) => {
                 console.error("Hubo un error al guardar el archivo:", error);
             }
         }else{
-            console.log("El usuario canceló el guardado.");
+            console.log("El usuario cancelo el guardado.");
         }
     }).catch(err =>{
 console.error("Error en el diálogo de guardado:", err);
     });
 
-    console.log(`Saving content of the file`);
-    console.log(arg);
 });
-
-Menu.setApplicationMenu(menu);
